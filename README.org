@@ -1,0 +1,9 @@
+#+TITLE: 
+#+AUTHOR: 
+#+DATE: 
+#+STARTUP: show3levels hidestars
+
+* ToDo
+** TODO use object to describe how to connect to druid cluster
+- cluster_info
+- druid_info

@@ -42,4 +42,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-minitest', '~> 0.38', '>= 0.38.2'
   spec.add_development_dependency 'rubocop-rake', '~> 0.7', '>= 0.7.1'
   spec.add_development_dependency 'simplecov', '~> 0.22'
+
+  spec.add_dependency 'faraday', '~> 2.14'
+  spec.add_dependency 'faraday-retry', '~> 2.3', '>= 2.3.2'
+  spec.add_dependency 'gli', '~> 2.22', '>= 2.22.2'
 end

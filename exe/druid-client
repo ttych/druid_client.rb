@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'gli'
+require 'druid_client'
+require 'druid_client/cli'
+
+class DruidClientCli
+  extend GLI::App
+
+  program_desc 'Druid client'
+  version DruidClient::VERSION
+
+  subcommand_option_handling :normal
+  arguments :strict
+
+  desc 'Druid coordinator URL'
+  flag %i[url U], default_value: 'http://localhost:8081'
+
+  desc 'Username for basic authentication'
+  flag %i[username u]
+
+  desc 'Password for basic authentication'
+  flag %i[password p]
+
+  desc 'Submit query to Druid'
+  command :query do |q|
+    q.desc 'Submit SQL query'
+    q.arg_name 'sql_query', 'The SQL query to execute'
+    q.command :sql do |sql|
+      sql.action do |global_options, options, args|
+        DruidClient::Cli.new(global_options: global_options)
+                        .sql_query(query: args.join(' ').strip,
+                                   options: options)
+      end
+    end
+  end
+
+  pre do |_global, _command, _options, _args|
+    true
+  end
+
+  post do |_global, _command, _options, _args|
+    true
+  end
+
+  on_error do |_exception|
+    true
+  end
+end
+
+exit DruidClientCli.run(ARGV)
