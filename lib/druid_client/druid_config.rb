@@ -4,21 +4,33 @@ require_relative 'error'
 
 module DruidClient
   class DruidConfig
+    DEFAULTS = {
+      url: 'http://localhost:8888',
+      user_agent: 'druid_client.rb',
+      timeout: 30,
+      verify_ssl: true,
+      log_headers: false,
+      log_bodies: false
+    }.freeze
+
     def initialize(**options)
-      @options = options
-      @url = @options[:url] || DEFAULT_URL
-      @username = @options[:username] || DEFAULT_USERNAME
-      @password = @options[:password] || DEFAULT_PASSWORD
+      @options = DEFAULTS.update(options)
 
       yield self if block_given?
     end
 
     def verify!
-      raise ConfigError, 'Missing url in DruidConfig' if @url.empty?
+      return if @options[:url].to_s.size.positive?
+
+      raise ConfigError, 'Missing url in DruidConfig'
     end
 
-    def to_h
-      @options
+    def keys
+      @options.keys
+    end
+
+    def [](key)
+      @options[key]
     end
   end
 end

@@ -9,6 +9,13 @@ require 'sinatra'
 
 # SQL query
 post '/druid/v2/sql' do
+  auth = Rack::Auth::Basic::Request.new(request.env)
+  username, password = auth.credentials if auth.provided? && auth.basic?
+  headers = request.env.select { |k, v| k.start_with? 'HTTP_' }
+
+  puts "# basic auth: #{username}, #{password}"
+  puts "# headers: #{headers}"
+
   $call_count ||= 0
   $call_count += 1
   case $call_count % 3
@@ -20,8 +27,6 @@ post '/druid/v2/sql' do
     status 500
   end
   content_type :json
-  auth = Rack::Auth::Basic::Request.new(request.env)
-  username, password = auth.credentials if auth.provided? && auth.basic?
 
   response_headers = {
     'X-Custom-Header-1' => 'h1',

@@ -7,13 +7,12 @@ require_relative 'response'
 module DruidClient
   module Api
     class RestClient
-      MAX_RETRIES = 0
+      attr_reader :url, :log, :options
 
-      attr_reader :url, :options
-
-      def initialize(url:, **options)
-        @url = url
+      def initialize(options = {})
         @options = options
+        @url = options[:url]
+        @log = options[:log]
       end
 
       def get(path, params: {}, headers: {})
@@ -56,17 +55,28 @@ module DruidClient
         Response.new(status_code: 0, body: e.message, elapsed_time: elapsed_time)
       end
 
-      def client
-        @client ||= Faraday.new(url: base_url) do |conn|
-          conn.request :authorization, :basic, basic_username, basic_password if basic_auth?
-          conn.headers = base_headers
-          conn.adapter Faraday.default_adapter
-          conn.response :logger if ENV['DEBUG']
-        end
+      def client_options
+        {
+          url: url,
+          headers: { 'User-Agent' => user_agent }.compact,
+          request: { timeout: timeout }.compact,
+          ssl: { ca_file: ca_file,
+                 ca_path: ca_path,
+                 verify: verify_ssl }.compact
+        }
       end
 
-      def base_url
-        url
+      def client
+        @client ||= Faraday.new(client_options) do |conn|
+          conn.request :authorization, :basic, basic_username, basic_password if basic_auth?
+          conn.request :json
+          conn.response :json
+          if log
+            conn.response :logger, log, headers: options[:log_headers], bodies: options[:log_bodies],
+                                        log_level: :debug
+          end
+          conn.adapter Faraday.default_adapter
+        end
       end
 
       def base_headers
@@ -85,10 +95,24 @@ module DruidClient
         options[:password]
       end
 
-      class << self
-        def from_druid_config(druid_config)
-          new(**druid_config.to_h)
-        end
+      def user_agent
+        options[:user_agent]
+      end
+
+      def timeout
+        options[:timeout]
+      end
+
+      def ca_file
+        options[:ca_file]
+      end
+
+      def ca_path
+        options[:ca_path]
+      end
+
+      def verify_ssl
+        options[:verify_ssl]
       end
     end
   end

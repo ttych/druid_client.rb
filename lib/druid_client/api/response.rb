@@ -22,8 +22,6 @@ module DruidClient
         !success?
       end
 
-      def raise_on_error; end
-
       def to_s
         "#<Response status_code=#{status_code} elapsed_time=#{elapsed_time}s>"
       end

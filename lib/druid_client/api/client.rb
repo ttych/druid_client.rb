@@ -19,7 +19,7 @@ module DruidClient
       end
 
       def rest_client
-        @rest_client ||= RestClient.from_druid_config(druid_config)
+        @rest_client ||= RestClient.new(druid_config)
       end
 
       class << self
