@@ -3,14 +3,13 @@
 module DruidClient
   module Api
     class Response
-      attr_reader :status_code, :body, :headers, :elapsed_time, :retry_count
+      attr_reader :status_code, :body, :headers, :elapsed_time
 
-      def initialize(status_code:, body:, headers: {}, elapsed_time: nil, retry_count: nil)
+      def initialize(status_code:, body:, headers: {}, elapsed_time: nil)
         @status_code = status_code
         @body = body
         @headers = headers
         @elapsed_time = elapsed_time
-        @retry_count = retry_count
       end
 
       def success?
@@ -26,7 +25,7 @@ module DruidClient
       def raise_on_error; end
 
       def to_s
-        "#<Response status_code=#{status_code} retry_count=#{retry_count} elapsed_time=#{elapsed_time}s>"
+        "#<Response status_code=#{status_code} elapsed_time=#{elapsed_time}s>"
       end
     end
   end

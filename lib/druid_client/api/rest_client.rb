@@ -16,27 +16,27 @@ module DruidClient
         @options = options
       end
 
-      def get(path, params: {}, headers: {}, max_retries: MAX_RETRIES)
-        request(:get, path, params: params, headers: headers, max_retries: max_retries)
+      def get(path, params: {}, headers: {})
+        request(:get, path, params: params, headers: headers)
       end
 
-      def post(path, body: nil, headers: {}, max_retries: MAX_RETRIES)
-        request(:post, path, body: body, headers: headers, max_retries: max_retries)
+      def post(path, body: nil, headers: {})
+        request(:post, path, body: body, headers: headers)
       end
 
-      def put(path, body: nil, headers: {}, max_retries: MAX_RETRIES)
-        request(:put, path, body: body, headers: headers, max_retries: max_retries)
+      def put(path, body: nil, headers: {})
+        request(:put, path, body: body, headers: headers)
       end
 
-      def patch(path, body: nil, headers: {}, max_retries: MAX_RETRIES)
-        request(:patch, path, body: body, headers: headers, max_retries: max_retries)
+      def patch(path, body: nil, headers: {})
+        request(:patch, path, body: body, headers: headers)
       end
 
-      def delete(path, params: {}, headers: {}, max_retries: MAX_RETRIES)
-        request(:delete, path, params: params, headers: headers, max_retries: max_retries)
+      def delete(path, params: {}, headers: {})
+        request(:delete, path, params: params, headers: headers)
       end
 
-      def request(method, path, body: nil, params: {}, headers: {}, max_retries: MAX_RETRIES)
+      def request(method, path, body: nil, params: {}, headers: {})
         File.join(url, path)
         start_time = Time.now
         response = client.send(method) do |req|
@@ -49,8 +49,7 @@ module DruidClient
           status_code: response.status,
           headers: response.headers,
           body: response.body,
-          elapsed_time: elapsed_time,
-          retry_count: 0
+          elapsed_time: elapsed_time
         )
       rescue Faraday::Error => e
         elapsed_time = Time.now - start_time
