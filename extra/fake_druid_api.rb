@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength,Style/GlobalVars
 
 # fake Druid API
 # launch with ruby fake_druid_api.rb
-
 
 require 'sinatra'
 
@@ -43,3 +43,5 @@ post '/druid/v2/sql' do
     }
   ].to_json
 end
+
+# rubocop:enable all
