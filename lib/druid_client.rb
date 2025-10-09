@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require_relative 'druid_client/version'
+require_relative 'druid_client/api'
 
 module DruidClient
-  class Error < StandardError; end
-  # Your code goes here...
+  def self.api(...)
+    DruidClient::Api.new(...)
+  end
 end
