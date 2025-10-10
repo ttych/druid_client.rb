@@ -43,16 +43,16 @@ module DruidClient
           req.headers.merge!(headers)
           req.body = body.to_json if body
         end
-        elapsed_time = Time.now - start_time
+        duration = Time.now - start_time
         Response.new(
           status_code: response.status,
           headers: response.headers,
           body: response.body,
-          elapsed_time: elapsed_time
+          duration: duration
         )
       rescue Faraday::Error => e
-        elapsed_time = Time.now - start_time
-        Response.new(status_code: 0, body: e.message, elapsed_time: elapsed_time)
+        duration = Time.now - start_time
+        Response.new(status_code: 0, body: e.message, duration: duration)
       end
 
       def client_options

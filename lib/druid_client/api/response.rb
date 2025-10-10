@@ -3,19 +3,19 @@
 module DruidClient
   module Api
     class Response
-      attr_reader :status_code, :body, :headers, :elapsed_time
+      attr_reader :status_code, :body, :headers, :duration
 
-      def initialize(status_code:, body:, headers: {}, elapsed_time: nil)
+      def initialize(status_code:, body:, headers: {}, duration: nil)
         @status_code = status_code
         @body = body
         @headers = headers
-        @elapsed_time = elapsed_time
+        @duration = duration
       end
 
       def success?
         return false unless status_code
 
-        200.299.include?(status_code)
+        (200..299).include?(status_code)
       end
 
       def error?
@@ -23,7 +23,7 @@ module DruidClient
       end
 
       def to_s
-        "#<Response status_code=#{status_code} elapsed_time=#{elapsed_time}s>"
+        "#<Response status_code=#{status_code} duration=#{duration}s>"
       end
     end
   end
