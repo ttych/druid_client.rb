@@ -31,8 +31,8 @@ module DruidClient
           parameters: parameters.to_a,
           resultFormat: result_format.to_s,
           header: header,
-          typesHeader: types_header,
-          sqlTypesHeader: sql_types_header,
+          typesHeader: header && types_header,
+          sqlTypesHeader: header && sql_types_header,
           context: context.to_h
         }
         post(SQL_PATH, body: query_body)
